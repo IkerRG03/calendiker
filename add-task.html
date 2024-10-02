@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Tarea</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="roboto-slab">Añadir Nueva Tarea</h1>
+        
+        <form class="task-form" id="task-form" onsubmit="return addTask();">
+            <input type="text" id="task-title" placeholder="Título" required>
+            <textarea id="task-description" placeholder="Descripción"></textarea>
+            <input type="url" id="task-link" placeholder="Enlace (opcional)">
+            <input type="date" id="task-date" required>
+            <input type="time" id="task-time" required>
+            <input type="text" id="task-location" placeholder="Ubicación (opcional)">
+            <button type="submit">Añadir Tarea</button>
+        </form>
+
+        <a href="index.html" class="add-task-btn">Volver a la Lista de Tareas</a>
+    </div>
+
+    <!-- Enlace al archivo JavaScript para añadir tareas -->
+    <script src="add-task.js"></script>
+
+</body>
+</html>
