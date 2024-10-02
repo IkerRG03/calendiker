@@ -40,6 +40,9 @@
                 <div id="later-tasks" class="tasks"></div>
             </section>
         </div>
+
+        <button id="export-btn" onclick="exportTasks()">Exportar Tareas</button>
+        <input type="file" id="import-file" accept=".json" onchange="importTasks(event)" />
     </div>
 
     <!-- Enlace al archivo JavaScript -->

@@ -7,7 +7,7 @@ function displayTasks() {
     document.getElementById('urgent-tasks').innerHTML = '';
     document.getElementById('soon-tasks').innerHTML = '';
     document.getElementById('later-tasks').innerHTML = '';
-    document.getElementById('today-tasks').innerHTML = ''; // Añadir contenedor para tareas de hoy
+    document.getElementById('today-tasks').innerHTML = '';
 
     const today = new Date();
     const tomorrow = new Date(today);
@@ -34,7 +34,7 @@ function displayTasks() {
 
         // Clasificar las tareas según la fecha
         if (taskDate.toDateString() === today.toDateString()) {
-            document.getElementById('today-tasks').innerHTML += taskElement; // Mostrar tareas de hoy
+            document.getElementById('today-tasks').innerHTML += taskElement;
         } else if (taskDate.toDateString() === tomorrow.toDateString()) {
             document.getElementById('urgent-tasks').innerHTML += taskElement;
         } else if (taskDate > today && taskDate <= fourDaysLater) {
@@ -43,9 +43,6 @@ function displayTasks() {
             document.getElementById('later-tasks').innerHTML += taskElement;
         }
     });
-
-    // Para depuración
-    console.log('Tasks displayed:', tasks);
 }
 
 // Función para mostrar u ocultar el botón de borrar
@@ -65,6 +62,33 @@ function deleteTask(event, index) {
     tasks.splice(index, 1); // Eliminar la tarea del array
     localStorage.setItem('tasks', JSON.stringify(tasks)); // Actualizar el almacenamiento
     displayTasks(); // Volver a mostrar las tareas
+}
+
+// Función para exportar tareas
+function exportTasks() {
+    const dataStr = JSON.stringify(tasks, null, 2); // Convertir tareas a formato JSON
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'tasks.json');
+    a.click(); // Forzar la descarga
+}
+
+// Función para importar tareas
+function importTasks(event) {
+    const file = event.target.files[0]; // Obtener el archivo seleccionado
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const data = e.target.result;
+        tasks = JSON.parse(data); // Parsear el JSON a un objeto
+        localStorage.setItem('tasks', JSON.stringify(tasks)); // Guardar en localStorage
+        displayTasks(); // Mostrar tareas actualizadas
+    };
+    
+    reader.readAsText(file); // Leer el archivo como texto
 }
 
 // Función para agregar una nueva tarea
@@ -99,7 +123,6 @@ function addTask() {
         document.getElementById('task-location').value = '';
 
         alert("Tarea añadida con éxito!");
-        displayTasks(); // Mostrar tareas actualizadas
         return false; // Evitar el envío del formulario
     }
 }
