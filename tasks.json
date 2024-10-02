@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "title": "Tarea 1",
+        "description": "Descripción de la tarea 1",
+        "link": "http://example.com",
+        "date": "2024-10-05",
+        "time": "10:00",
+        "location": "Ubicación 1"
+    },
+    {
+        "title": "Tarea 2",
+        "description": "Descripción de la tarea 2",
+        "link": "",
+        "date": "2024-10-06",
+        "time": "12:00",
+        "location": "Ubicación 2"
+    }
+]
