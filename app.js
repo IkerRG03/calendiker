@@ -43,6 +43,9 @@ function displayTasks() {
             document.getElementById('later-tasks').innerHTML += taskElement;
         }
     });
+
+    // Para depuración
+    console.log('Tasks displayed:', tasks);
 }
 
 // Función para mostrar u ocultar el botón de borrar
@@ -95,7 +98,9 @@ function addTask() {
         document.getElementById('task-time').value = '';
         document.getElementById('task-location').value = '';
 
+        alert("Tarea añadida con éxito!");
         displayTasks(); // Mostrar tareas actualizadas
+        return false; // Evitar el envío del formulario
     }
 }
 
