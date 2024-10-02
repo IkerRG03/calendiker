@@ -41,8 +41,11 @@
             </section>
         </div>
 
-        <button id="export-btn" onclick="exportTasks()">Exportar Tareas</button>
-        <input type="file" id="import-file" accept=".json" onchange="importTasks(event)" />
+        <!-- Botones para importar y exportar tareas -->
+        <div class="import-export-container">
+            <button id="export-btn" onclick="exportTasks()">Exportar Tareas</button>
+            <input type="file" id="import-file" accept=".json" onchange="importTasks(event)" />
+        </div>
     </div>
 
     <!-- Enlace al archivo JavaScript -->
