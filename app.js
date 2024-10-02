@@ -1,3 +1,6 @@
+// URL del archivo JSON
+const TASKS_URL = 'https://ikerrg03.github.io/calendiker/tasks.json';
+
 // Función para mostrar tareas en las secciones correspondientes
 async function displayTasks() {
     // Limpiar las secciones
@@ -7,7 +10,7 @@ async function displayTasks() {
     document.getElementById('today-tasks').innerHTML = '';
 
     try {
-        const response = await fetch('tasks.json'); // Obtener tareas del archivo JSON
+        const response = await fetch(TASKS_URL); // Obtener tareas del archivo JSON
         if (!response.ok) {
             throw new Error('Error al cargar las tareas: ' + response.statusText);
         }
@@ -72,7 +75,7 @@ async function addTask() {
 
         try {
             // Enviar tarea al backend
-            const response = await fetch('/tasks', {
+            const response = await fetch('https://ikerrg03.github.io/calendiker/tasks.json', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -101,6 +104,60 @@ async function addTask() {
         alert("Por favor, completa todos los campos obligatorios.");
     }
 }
+
+// Función para eliminar una tarea
+async function deleteTask(event, index) {
+    event.stopPropagation();
+
+    // Confirmar eliminación
+    if (!confirm("¿Estás seguro de que deseas eliminar esta tarea?")) {
+        return;
+    }
+
+    try {
+        const response = await fetch(TASKS_URL);
+        const tasks = await response.json();
+
+        if (index < 0 || index >= tasks.length) {
+            throw new Error('Índice de tarea inválido');
+        }
+
+        // Crear un nuevo arreglo sin la tarea que se eliminará
+        const updatedTasks = tasks.filter((_, taskIndex) => taskIndex !== index);
+
+        // Enviar el nuevo arreglo de tareas al servidor
+        await fetch(TASKS_URL, {
+            method: 'PUT', // Cambiar a PUT si se usa un endpoint diferente en tu backend
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedTasks)
+        });
+
+        alert("Tarea eliminada con éxito!");
+        displayTasks(); // Mostrar tareas actualizadas
+    } catch (error) {
+        console.error('Error al eliminar la tarea:', error);
+    }
+}
+
+// Función para alternar la visibilidad del botón de eliminar
+function toggleDelete(index) {
+    const deleteBtn = document.getElementById(`delete-btn-${index}`);
+    deleteBtn.style.display = deleteBtn.style.display === 'none' ? 'block' : 'none';
+}
+// Actualizar tareas en el archivo JSON
+app.put('/tasks', (req, res) => {
+    const updatedTasks = req.body;
+
+    fs.writeFile(TASKS_FILE, JSON.stringify(updatedTasks, null, 2), (err) => {
+        if (err) {
+            return res.status(500).send('Error writing tasks file');
+        }
+        res.status(204).send(); // No content
+    });
+});
+
 
 // Mostrar las tareas al cargar la página
 window.onload = function() {

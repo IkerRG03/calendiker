@@ -43,6 +43,44 @@ app.post('/tasks', (req, res) => {
     });
 });
 
+// Actualizar tareas en el archivo JSON
+app.put('/tasks', (req, res) => {
+    const updatedTasks = req.body;
+
+    fs.writeFile(TASKS_FILE, JSON.stringify(updatedTasks, null, 2), (err) => {
+        if (err) {
+            return res.status(500).send('Error writing tasks file');
+        }
+        res.status(204).send(); // No content
+    });
+});
+
+// Eliminar una tarea
+app.delete('/tasks/:index', (req, res) => {
+    const index = parseInt(req.params.index, 10);
+
+    fs.readFile(TASKS_FILE, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).send('Error reading tasks file');
+        }
+
+        let tasks = JSON.parse(data || '[]');
+        if (index < 0 || index >= tasks.length) {
+            return res.status(404).send('Task not found');
+        }
+
+        // Eliminar la tarea
+        tasks.splice(index, 1);
+
+        fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2), (err) => {
+            if (err) {
+                return res.status(500).send('Error writing tasks file');
+            }
+            res.status(204).send(); // No content
+        });
+    });
+});
+
 // Iniciar el servidor
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
